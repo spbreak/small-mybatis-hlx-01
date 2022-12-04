@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hlx.mybatis.test.dao.IActivityDao">
+    
+<!--    缓存回收策略-->
+<!--    eviction:-->
+<!--    LUR&#45;&#45;最近最少使用(默认)-->
+<!--    FIFO&#45;&#45;先进先出-->
+<!--    SOFT&#45;&#45;软引用: 移除基于垃圾回收器状态和软引用规则的对象-->
+<!--    WEAK&#45;&#45;弱引用: 更积极地移除基于垃圾收集器状态和弱引用规则的对象-->
+<!--    size: 可以存储512个列表或对象的引用-->
+<!--    readOnly: true : 只用途读缓存-->
+<!--    flushInterval: 缓存刷新间隔, 单位毫秒-->
+    <cache eviction="FIFO" flushInterval="600000" size="512" readOnly="true"/>
+    
+    <resultMap id="activityMap" type="cn.hlx.mybatis.test.po.Activity">
+        <id column="id" property="id"/>
+        <result column="activity_id" property="activityId"/>
+        <result column="activity_name" property="activityName"/>
+        <result column="activity_desc" property="activityDesc"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <select id="queryActivityById" parameterType="cn.hlx.mybatis.test.po.Activity" resultMap="activityMap">
+        SELECT activity_id, activity_name, activity_desc, create_time, update_time
+        FROM activity
+--         trim: 修剪
+--         prefix: 有的话添加前缀
+--         prefixOverrides: 前缀覆盖, 当语句以特定符号为前缀时, 将其去除
+--         suffixOverrides: 后缀覆盖, 当语句以特定符号为后缀时, 将其去除
+        <trim prefix="where" prefixOverrides="AND | OR" suffixOverrides="and">
+            <if test="null != activityId">
+                activity_id = #{activityId}
+            </if>
+        </trim>
+    </select>
+    
+    <insert id="insert" parameterType="cn.hlx.mybatis.test.po.Activity">
+        INSERT INTO activity
+        (activity_id, activity_name, activity_desc, create_time, update_time)
+        VALUES (#{activityId}, #{activityName}, #{activityDesc}, now(), now())
+--         返回最近一次插入的id
+--         order: BEFORE: 插入前执行最近一次插入的Id查询, AFTER: 插入后执行最近一次的Id查询 
+        <selectKey keyProperty="id" order="AFTER" resultType="long">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+
+    </insert>
+
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+        <!--缓存级别: SESSION/STATEMENT-->
+        <setting name="localCacheScope" value="STATEMENT"/>
+    </settings>
+    
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+<!--            Mybatis	UNPOOLED: 使用时创建, 然后销毁-->
+<!--            POOLED	: 创建一个连接池, 在开发和测试时使用较多-->
+<!--            JNDI: 生产环境较常使用, mybatis会从在应用服务器向配置好的JNDI数据源DataSource获取数据库连接-->
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://192.168.221.82/mybatis?useUnicode=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    
+    <mappers>
+<!--        <mapper resource="mapper/User_Mapper.xml"/>-->
+        <mapper resource="mapper/Activity_Mapper.xml"/>
+    </mappers>
+    
+</configuration>
