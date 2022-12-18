@@ -49,4 +49,13 @@ public class ApiTest {
         System.out.println("测试结果: " + result);
     }
 
+    public class TestGenericity<T> {
+        public T testGenericityFun() {
+            return (T) "1";
+        }
+    }
+    
+    
 }
+
+
