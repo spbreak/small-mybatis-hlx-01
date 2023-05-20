@@ -1,11 +1,10 @@
 package cn.hlx.mybatis.executor;
 
-import cn.hlx.mybatis.datasource.pooled.PooledDataSource;
-import cn.hlx.mybatis.executor.resultset.ResultSetHandler;
 import cn.hlx.mybatis.mapping.BoundSql;
 import cn.hlx.mybatis.mapping.MappedStatement;
 import cn.hlx.mybatis.session.Configuration;
 import cn.hlx.mybatis.session.ResultHandler;
+import cn.hlx.mybatis.session.RowBounds;
 import cn.hlx.mybatis.transaction.Transaction;
 import org.slf4j.LoggerFactory;
 
@@ -36,14 +35,14 @@ public abstract class BaseExecutor implements Executor {
     }
 
     @Override
-    public <E> List<E> query(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
+    public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         if (closed) {
             throw new RuntimeException("Executor was closed.");
         }
-        return doQuery(ms, parameter, resultHandler, boundSql);
+        return doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
     }
 
-    protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql);
+    protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql);
 
     @Override
     public Transaction getTransaction() {

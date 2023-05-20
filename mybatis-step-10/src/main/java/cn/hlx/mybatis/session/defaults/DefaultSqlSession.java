@@ -5,6 +5,7 @@ import cn.hlx.mybatis.mapping.BoundSql;
 import cn.hlx.mybatis.mapping.Environment;
 import cn.hlx.mybatis.mapping.MappedStatement;
 import cn.hlx.mybatis.session.Configuration;
+import cn.hlx.mybatis.session.RowBounds;
 import cn.hlx.mybatis.session.SqlSession;
 import cn.hlx.mybatis.transaction.Transaction;
 import cn.hlx.mybatis.transaction.TransactionFactory;
@@ -45,7 +46,7 @@ public class DefaultSqlSession implements SqlSession {
     public <T> T selectOne(String statement, Object parameter) {
         logger.info("执行查询 statement：{} parameter：{}", statement, JSON.toJSONString(parameter));
         MappedStatement ms = configuration.getMappedStatement(statement);
-        List<T> list = executor.query(ms, parameter, Executor.NO_RESULT_HANDLER, ms.getSqlSource().getBoundSql(parameter));
+        List<T> list = executor.query(ms, parameter, RowBounds.DEFAULT, Executor.NO_RESULT_HANDLER, ms.getSqlSource().getBoundSql(parameter));
         return list.get(0);
     }
 
